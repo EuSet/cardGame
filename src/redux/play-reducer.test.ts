@@ -7,7 +7,7 @@ test('get random cards', () => {
 })
 test('get cards value', () => {
     let newState = playReducer(initialState, {type: "SET_TWO_CARDS_TO_PLAY_TABLE"})
-    let newCount = newState.playTable[0]!.value += newState.playTable[1]!.value
+    let newCount = newState.playTable[0].value += newState.playTable[1].value
     expect(newState.counterValuePlayer).not.toBe(0)
     expect(newState.counterValuePlayer).toEqual(newCount)
 })
@@ -21,7 +21,8 @@ test('count cards value', () => {
 test('save value', () => {
     let newState = playReducer(initialState, {type: "SET_TWO_CARDS_TO_PLAY_TABLE"})
     let updateNewState = playReducer(newState, {type: "SAVE_COUNT_VALUE"})
-    expect(updateNewState.resultValuePlayer).toEqual(updateNewState.counterValuePlayer)
+    console.log(updateNewState.resultCardsPlayer.length)
+    expect(updateNewState.resultCardsPlayer).not.toBe([])
     let anotherUpdateNewState = playReducer(updateNewState, {type: "SET_TWO_CARDS_TO_PLAY_TABLE"})
     expect(anotherUpdateNewState.resultValuePlayer).not.toEqual(anotherUpdateNewState.counterValuePlayer)
 })
@@ -30,3 +31,5 @@ test('not the same card', () => {
     let newState = playReducer(initialState, {type: "SET_TWO_CARDS_TO_PLAY_TABLE"})
     expect(newState.playTable[0]).not.toEqual(newState.playTable[1])
 })
+
+

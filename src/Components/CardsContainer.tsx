@@ -4,7 +4,9 @@ import {Cards} from "./Cards";
 
 export const mapStateToProps = (state:StateType) => {
     return {
-        playTable: state.playPage.playTable
+        playTable: state.playPage.playTable,
+        resultValuePlayer: state.playPage.resultValuePlayer,
+        resultCardsPlayer: state.playPage.resultCardsPlayer
     }
 }
 

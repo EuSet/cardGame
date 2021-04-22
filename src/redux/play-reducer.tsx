@@ -1,18 +1,5 @@
 import React from 'react'
-import twoC from './../Components/cardsimages/2C.png'
-import threeC from './../Components/cardsimages/3C.png'
-import fourC from './../Components/cardsimages/4C.png'
-import fiveC from './../Components/cardsimages/5C.png'
-import sixC from './../Components/cardsimages/6C.png'
-import sevenC from './../Components/cardsimages/7C.png'
-import eightC from './../Components/cardsimages/8C.png'
-import nineC from './../Components/cardsimages/9C.png'
-import tenC from './../Components/cardsimages/10C.png'
-import jackC from './../Components/cardsimages/JC.png'
-import queenC from './../Components/cardsimages/QC.png'
-import kingC from './../Components/cardsimages/KC.png'
-import aceC from './../Components/cardsimages/AC.png'
-import {v1} from "uuid";
+import {cardsArray} from "../Components/cardsArray";
 
 export type ActionType =
     ReturnType<typeof startGame> |
@@ -27,6 +14,7 @@ export type ActionType =
 export type PlayPageType = {
     cards: Array<CardType>
     playTable: Array<CardType>
+    resultCardsPlayer:Array<CardType>
     counterValuePlayer: number
     resultValuePlayer: number
     counterValueComp: number
@@ -46,40 +34,11 @@ const READY_FOR_NEW_GAME = 'READY_FOR_NEW_GAME'
 const SET_TWO_CARDS_FOR_COMPUTER = 'SET_TWO_CARDS_FOR_COMPUTER'
 const GET_ANOTHER_CARD_FOR_COMP = 'GET_ANOTHER_CARD_FOR_COMP'
 const SAVE_COMP_VALUE = 'SAVE_COMP_VALUE'
+
 export const initialState: PlayPageType = {
-    cards: [{value: 11, image: <img src={aceC} alt={'#'}/>, id: v1()}, {
-        value: 2,
-        image: <img src={twoC} alt={'#'}/>,
-        id: v1()
-    },
-        {value: 3, image: <img src={threeC} alt={'#'}/>, id: v1()}, {
-            value: 4,
-            image: <img src={fourC} alt={'#'}/>,
-            id: v1()
-        },
-        {value: 5, image: <img src={fiveC} alt={'#'}/>, id: v1()}, {
-            value: 6,
-            image: <img src={sixC} alt={'#'}/>,
-            id: v1()
-        },
-        {value: 7, image: <img src={sevenC} alt={'#'}/>, id: v1()}, {
-            value: 8,
-            image: <img src={eightC} alt={'#'}/>,
-            id: v1()
-        },
-        {value: 9, image: <img src={nineC} alt={'#'}/>, id: v1()}, {
-            value: 10,
-            image: <img src={tenC} alt={'#'}/>,
-            id: v1()
-        },
-        {value: 2, image: <img src={jackC} alt={'#'}/>, id: v1()}, {
-            value: 3,
-            image: <img src={queenC} alt={'#'}/>,
-            id: v1()
-        },
-        {value: 4, image: <img src={kingC} alt={'#'}/>, id: v1()}
-    ],
+    cards: cardsArray,
     playTable: [],
+    resultCardsPlayer:[],
     counterValuePlayer: 0,
     counterValueComp: 0,
     resultValuePlayer: 0,
@@ -88,8 +47,19 @@ export const initialState: PlayPageType = {
 }
 
 export const playReducer = (state: PlayPageType = initialState, action: ActionType) => {
+
     function getRandomCards(): Array<CardType> {
-        const card = state.cards[Math.floor(Math.random() * state.cards.length)]
+        function shuffleCards():CardType {
+            const card = state.cards[Math.floor(Math.random() * state.cards.length)]
+            if(card.value === 11){
+                if(state.counterValueComp === 11 || state.counterValuePlayer === 11){
+                    card.value = 10
+                    return card
+                }
+            }
+            return card
+        }
+        const card = shuffleCards()
         if (state.playTable[0]) {
             if (state.playTable[0].id !== card.id) {
                 state.playTable = [...state.playTable, card]
@@ -109,16 +79,20 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
     }
 
     function getCardFunc() {
-        const card = state.cards[Math.floor(Math.random() * state.cards.length)]
-        for (let item of state.playTable) {
-            if (card.id !== item.id) {
+        let remainderCards:CardType[] = state.cards
+        for(let i = 0; i < state.playTable.length; i++){
+            remainderCards = remainderCards.filter(c => c.id !== state.playTable[i].id)
+        }
+        const card = remainderCards[Math.floor(Math.random() * remainderCards.length)]
+        if(card.value === 11){
+            if(state.counterValueComp > 11 || state.counterValuePlayer > 11){
+                card.value = 1
                 return card
-            } else {
-                getCardFunc()
             }
         }
         return card
     }
+
 
     switch (action.type) {
         case "SET_TWO_CARDS_TO_PLAY_TABLE":
@@ -126,6 +100,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
             return {
                 ...state,
                 playTable: state.playTable,
+                resultCardsPlayer:[],
                 counterValuePlayer: state.counterValuePlayer + state.playTable[0].value + state.playTable[1].value,
                 resultValuePlayer: 0,
                 resultComputerValue: 0
@@ -142,6 +117,8 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                 ...state,
                 resultValuePlayer: state.counterValuePlayer,
                 counterValuePlayer: 0,
+                resultCardsPlayer: [...state.playTable],
+                playTable: []
             }
         case "TOGGLE_SHOW_START_BUTTON":
             return {
@@ -162,7 +139,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
             return {
                 ...state,
                 playTable: state.playTable,
-                counterValueComp: state.counterValuePlayer + state.playTable[0].value + state.playTable[1].value
+                counterValueComp: state.counterValueComp + state.playTable[0].value + state.playTable[1].value
             }
         case "GET_ANOTHER_CARD_FOR_COMP":
             const newCompCard = getCardFunc()
@@ -175,7 +152,8 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
             return {
                 ...state,
                 resultComputerValue: state.counterValueComp,
-                counterValueComp: 0
+                counterValueComp: 0,
+                playTable: []
             }
         default:
             return state
