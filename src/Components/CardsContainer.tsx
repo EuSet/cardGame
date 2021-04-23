@@ -6,7 +6,6 @@ export const mapStateToProps = (state:StateType) => {
     return {
         playTable: state.playPage.playTable,
         resultValuePlayer: state.playPage.resultValuePlayer,
-        resultCardsPlayer: state.playPage.resultCardsPlayer
     }
 }
 

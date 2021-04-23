@@ -1,4 +1,3 @@
-import React from 'react'
 import {cardsArray} from "../Components/cardsArray";
 
 export type ActionType =
@@ -9,12 +8,12 @@ export type ActionType =
     ReturnType<typeof getInitialState> |
     ReturnType<typeof startComputerGame> |
     ReturnType<typeof getAnotherCardForComp> |
-    ReturnType<typeof stopCompGame>
+    ReturnType<typeof stopCompGame> |
+    ReturnType<typeof changeAceValue>
 
 export type PlayPageType = {
     cards: Array<CardType>
     playTable: Array<CardType>
-    resultCardsPlayer:Array<CardType>
     counterValuePlayer: number
     resultValuePlayer: number
     counterValueComp: number
@@ -31,14 +30,11 @@ const GET_ANOTHER_CARD = 'GET_ANOTHER_CARD'
 const SAVE_COUNT_VALUE = 'SAVE_COUNT_VALUE'
 const TOGGLE_SHOW_START_BUTTON = 'TOGGLE_SHOW_START_BUTTON'
 const READY_FOR_NEW_GAME = 'READY_FOR_NEW_GAME'
-const SET_TWO_CARDS_FOR_COMPUTER = 'SET_TWO_CARDS_FOR_COMPUTER'
-const GET_ANOTHER_CARD_FOR_COMP = 'GET_ANOTHER_CARD_FOR_COMP'
-const SAVE_COMP_VALUE = 'SAVE_COMP_VALUE'
+const CHANGE_ACE_VALUE = 'CHANGE_ACE_VALUE'
 
 export const initialState: PlayPageType = {
     cards: cardsArray,
     playTable: [],
-    resultCardsPlayer:[],
     counterValuePlayer: 0,
     counterValueComp: 0,
     resultValuePlayer: 0,
@@ -49,16 +45,17 @@ export const initialState: PlayPageType = {
 export const playReducer = (state: PlayPageType = initialState, action: ActionType) => {
 
     function getRandomCards(): Array<CardType> {
-        function shuffleCards():CardType {
+        function shuffleCards(): CardType {
             const card = state.cards[Math.floor(Math.random() * state.cards.length)]
-            if(card.value === 11){
-                if(state.counterValueComp === 11 || state.counterValuePlayer === 11){
+            if (card.value === 11) {
+                if (state.counterValueComp === 11 || state.counterValuePlayer === 11) {
                     card.value = 10
                     return card
                 }
             }
             return card
         }
+
         const card = shuffleCards()
         if (state.playTable[0]) {
             if (state.playTable[0].id !== card.id) {
@@ -73,52 +70,93 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
         }
         return state.playTable
     }
+
     function newPlayTable() {
         getRandomCards()
         getRandomCards()
     }
 
     function getCardFunc() {
-        let remainderCards:CardType[] = state.cards
-        for(let i = 0; i < state.playTable.length; i++){
+        let remainderCards: CardType[] = state.cards
+        for (let i = 0; i < state.playTable.length; i++) {
             remainderCards = remainderCards.filter(c => c.id !== state.playTable[i].id)
         }
         const card = remainderCards[Math.floor(Math.random() * remainderCards.length)]
-        if(card.value === 11){
-            if(state.counterValueComp > 11 || state.counterValuePlayer > 11){
-                card.value = 1
-                return card
-            }
-        }
         return card
     }
-
+    function changeAce(){
+        let newValue = state.counterValuePlayer
+        for(let i = 0; i < state.playTable.length; i++){
+            if( state.playTable[i].value === 11){
+                state.playTable[i].value = 1
+                newValue = newValue - 10
+            } if(newValue > 21){
+                getInitialState()
+               return  newValue = 0
+            }
+        }
+        return newValue
+    }
 
     switch (action.type) {
         case "SET_TWO_CARDS_TO_PLAY_TABLE":
             newPlayTable()
-            return {
-                ...state,
-                playTable: state.playTable,
-                resultCardsPlayer:[],
-                counterValuePlayer: state.counterValuePlayer + state.playTable[0].value + state.playTable[1].value,
-                resultValuePlayer: 0,
-                resultComputerValue: 0
+            switch (action.payload) {
+                case "player":
+                    return {
+                        ...state,
+                        playTable: state.playTable,
+                        resultCardsPlayer: [],
+                        counterValuePlayer: state.counterValuePlayer + state.playTable[0].value + state.playTable[1].value,
+                        resultValuePlayer: 0,
+                        resultComputerValue: 0
+                    }
+                case "computer":
+                    return {
+                        ...state,
+                        playTable: state.playTable,
+                        counterValueComp: state.counterValueComp + state.playTable[0].value + state.playTable[1].value
+                    }
+                default:
+                    return state
             }
         case "GET_ANOTHER_CARD":
             const newCard = getCardFunc()
-            return {
-                ...state,
-                playTable: [...state.playTable, newCard],
-                counterValuePlayer: state.counterValuePlayer + newCard!.value
+            switch (action.payload) {
+                case 'player':
+                    return {
+                        ...state,
+                        playTable: [...state.playTable, newCard],
+                        counterValuePlayer: state.counterValuePlayer + newCard.value
+                    }
+                case 'computer':
+                    return {
+                        ...state,
+                        playTable: [...state.playTable, newCard],
+                        counterValueComp: state.counterValueComp + newCard.value
+                    }
+                default:
+                    return state
             }
         case "SAVE_COUNT_VALUE":
-            return {
-                ...state,
-                resultValuePlayer: state.counterValuePlayer,
-                counterValuePlayer: 0,
-                resultCardsPlayer: [...state.playTable],
-                playTable: []
+            switch (action.payload) {
+                case 'player':
+                    return {
+                        ...state,
+                        resultValuePlayer: state.counterValuePlayer,
+                        counterValuePlayer: 0,
+                        playTable: []
+                    }
+                case 'computer':
+                    return {
+                        ...state,
+                        resultComputerValue: state.counterValueComp,
+                        counterValueComp: 0,
+                        playTable: []
+                    }
+                default:
+                    return state
+
             }
         case "TOGGLE_SHOW_START_BUTTON":
             return {
@@ -129,44 +167,38 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
             return {
                 ...state,
                 counterValuePlayer: 0,
+                playTable: [],
                 resultValuePlayer: 0,
                 counterValueComp: 0,
                 resultComputerValue: 0,
                 showStartButton: true
             }
-        case "SET_TWO_CARDS_FOR_COMPUTER":
-            newPlayTable()
+        case "CHANGE_ACE_VALUE":
             return {
                 ...state,
-                playTable: state.playTable,
-                counterValueComp: state.counterValueComp + state.playTable[0].value + state.playTable[1].value
-            }
-        case "GET_ANOTHER_CARD_FOR_COMP":
-            const newCompCard = getCardFunc()
-            return {
-                ...state,
-                playTable: [...state.playTable, newCompCard],
-                counterValueComp: state.counterValueComp + newCompCard.value
-            }
-        case "SAVE_COMP_VALUE":
-            return {
-                ...state,
-                resultComputerValue: state.counterValueComp,
-                counterValueComp: 0,
-                playTable: []
+                counterValuePlayer: changeAce()
             }
         default:
             return state
     }
 }
 export const startGame = () => {
-    return {type: SET_TWO_CARDS_TO_PLAY_TABLE} as const
+    return {type: SET_TWO_CARDS_TO_PLAY_TABLE, payload: 'player'} as const
+}
+export const startComputerGame = () => {
+    return {type: SET_TWO_CARDS_TO_PLAY_TABLE, payload: 'computer'} as const
 }
 export const getAnotherCard = () => {
-    return {type: GET_ANOTHER_CARD} as const
+    return {type: GET_ANOTHER_CARD, payload: 'player'} as const
+}
+export const getAnotherCardForComp = () => {
+    return {type: GET_ANOTHER_CARD, payload: 'computer'} as const
 }
 export const stopGame = () => {
-    return {type: SAVE_COUNT_VALUE} as const
+    return {type: SAVE_COUNT_VALUE, payload: 'player'} as const
+}
+export const stopCompGame = () => {
+    return {type: SAVE_COUNT_VALUE, payload: 'computer'} as const
 }
 export const toggleShowStartButton = () => {
     return {type: TOGGLE_SHOW_START_BUTTON} as const
@@ -174,12 +206,6 @@ export const toggleShowStartButton = () => {
 export const getInitialState = () => {
     return {type: READY_FOR_NEW_GAME} as const
 }
-export const startComputerGame = () => {
-    return {type: SET_TWO_CARDS_FOR_COMPUTER} as const
-}
-export const getAnotherCardForComp = () => {
-    return {type: GET_ANOTHER_CARD_FOR_COMP} as const
-}
-export const stopCompGame = () => {
-    return {type: SAVE_COMP_VALUE} as const
+export const changeAceValue = () => {
+    return {type: CHANGE_ACE_VALUE} as const
 }

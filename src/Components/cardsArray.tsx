@@ -16,7 +16,7 @@ import kingC from "./cardsimages/KC.png";
 import {CardType} from "../redux/play-reducer";
 
 export const cardsArray:Array<CardType> = [
-    {value: 11 || 1 || 10, image: <img src={aceC} alt={'#'}/>, id: v1()}, {
+    {value:  11 || 1 || 10, image: <img src={aceC} alt={'#'}/>, id: v1()}, {
         value: 2,
         image: <img src={twoC} alt={'#'}/>,
         id: v1()

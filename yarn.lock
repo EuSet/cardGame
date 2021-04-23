@@ -1930,6 +1930,21 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
+"@types/redux-devtools@^3.0.47":
+  version "3.0.47"
+  resolved "https://registry.yarnpkg.com/@types/redux-devtools/-/redux-devtools-3.0.47.tgz#5c7659ccfe69774e7b312e9e061497c0e3a9e808"
+  integrity sha512-2c2tcZa5pY4slrC89Li9Qrnrdcvdnu0GCN6wJBdxLUuEM9gCw67XWQwIkrx602aO0FoYBpYmHp06eZ2ixgCHMQ==
+  dependencies:
+    "@types/react" "*"
+    redux "^4.0.4"
+
+"@types/redux-thunk@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/redux-thunk/-/redux-thunk-2.1.0.tgz#bc2b6e972961831afb82a9bf4f06726e351f9416"
+  integrity sha1-vCtulylhgxr7gqm/TwZybjUflBY=
+  dependencies:
+    redux-thunk "*"
+
 "@types/redux@^3.6.0":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@types/redux/-/redux-3.6.0.tgz#f1ebe1e5411518072e4fdfca5c76e16e74c1399a"
@@ -9513,7 +9528,17 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-redux@*, redux@^4.0.0, redux@^4.0.5:
+redux-devtools-extension@^2.13.9:
+  version "2.13.9"
+  resolved "https://registry.yarnpkg.com/redux-devtools-extension/-/redux-devtools-extension-2.13.9.tgz#6b764e8028b507adcb75a1cae790f71e6be08ae7"
+  integrity sha512-cNJ8Q/EtjhQaZ71c8I9+BPySIBVEKssbPpskBfsXqb8HJ002A3KRVHfeRzwRo6mGPqsm7XuHTqNSNeS1Khig0A==
+
+redux-thunk@*, redux-thunk@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
+  integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
+
+redux@*, redux@^4.0.0, redux@^4.0.4, redux@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.5.tgz#4db5de5816e17891de8a80c424232d06f051d93f"
   integrity sha512-VSz1uMAH24DM6MF72vcojpYPtrTUu3ByVWfPL1nPfVRb5mZVTve5GnNCUV53QM/BZ66xfWrm0CTWoM+Xlz8V1w==

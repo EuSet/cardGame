@@ -16,6 +16,7 @@ type PropsType = {
     startComputerGame: () => void
     getAnotherCardForComp: () => void
     stopCompGame: () => void
+    changeAceValue: () => void
 }
 export const PlayPage = (props: PropsType) => {
     const startGameFunction = () => {
@@ -33,15 +34,24 @@ export const PlayPage = (props: PropsType) => {
     }
     useEffect(() => {
         if (props.counterValueComp > 0 && props.counterValueComp < 17) {
-            props.getAnotherCardForComp()
+            setTimeout(() => {
+                props.getAnotherCardForComp()
+            }, 3000)
         }
         if (props.counterValueComp >= 17 && props.counterValueComp <= 21) {
-            props.stopCompGame()
+            setTimeout(() => {
+                props.stopCompGame()
+            }, 3000)
+
         }
         if (props.counterValueComp > 21) {
-            props.stopCompGame()
+            setTimeout(() => {
+                props.changeAceValue()
+            }, 3000)
+
         }
     }, [props.counterValueComp])
+
     const stopGameFunction = () => {
         props.stopGame()
         props.toggleShowStartButton()
@@ -49,9 +59,13 @@ export const PlayPage = (props: PropsType) => {
     }
     useEffect(() => {
         if (props.counterValuePlayer > 21) {
-            props.getInitialState()
+            props.changeAceValue()
+            // if (props.counterValuePlayer > 21) {
+            //     props.getInitialState()
+            // }
         }
     }, [props.counterValuePlayer])
+
     return <div>
         {props.showStartButton ? <button onClick={startGameFunction}>start</button> : ''}
         <button disabled={props.showStartButton} onClick={getCard}>get
@@ -61,13 +75,14 @@ export const PlayPage = (props: PropsType) => {
             <span>{props.counterValueComp}</span>
             <hr/>
             <span>{props.resultComputerValue}</span>
+
         </div>
         <div>
-        <div>
-            <span>{props.counterValuePlayer}</span>
-            <hr/>
-            <span>{props.resultValuePlayer}</span>
-        </div>
+            <div>
+                <span>{props.counterValuePlayer}</span>
+                <hr/>
+                <span>{props.resultValuePlayer}</span>
+            </div>
         </div>
     </div>
 }
