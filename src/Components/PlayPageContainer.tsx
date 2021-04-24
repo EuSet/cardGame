@@ -5,7 +5,7 @@ import {
     getCardThunk,
     getInitialState,
     startComputerGame,
-    startGame,
+    startGame, startNewGameThunk,
     stopCompGame,
     stopGame,
     toggleShowStartButton
@@ -31,5 +31,6 @@ export const PlayPageContainer = connect(mapStateToProps,{
     startComputerGame,
     stopCompGame,
     getCardThunk,
-    getCardForCompThunk
+    getCardForCompThunk,
+    startNewGameThunk
 })(PlayPage)

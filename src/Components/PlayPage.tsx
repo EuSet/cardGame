@@ -2,7 +2,6 @@ import React, {useEffect} from "react";
 import {CardType} from "../redux/play-reducer";
 
 type PropsType = {
-    startGame: () => void
     playTable: Array<CardType>
     stopGame: () => void
     toggleShowStartButton: (toggle:boolean) => void
@@ -16,19 +15,15 @@ type PropsType = {
     stopCompGame: () => void
     getCardThunk: () => void
     getCardForCompThunk: () => void
+    startNewGameThunk:() => void
 }
 export const PlayPage: React.FC<PropsType> = ({counterValueComp,counterValuePlayer,
     ...props}) => {
     const startGameFunction = () => {
-        props.startGame()
-        props.toggleShowStartButton(false)
+        props.startNewGameThunk()
     }
     const getCard = () => {
         props.getCardThunk()
-        // props.getAnotherCard()
-        // if (props.counterValuePlayer > 21) {
-        //     alert('you loose')
-        // }
     }
     const startComputerGame = () => {
         props.startComputerGame()
@@ -58,10 +53,7 @@ export const PlayPage: React.FC<PropsType> = ({counterValueComp,counterValuePlay
     }
     useEffect(() => {
         if (counterValuePlayer > 21) {
-            // props.changeAceValue()
-            // if (props.counterValuePlayer > 21) {
                 props.getInitialState()
-            // }
         }
     }, [counterValuePlayer])
 

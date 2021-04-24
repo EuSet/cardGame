@@ -79,12 +79,15 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
         getRandomCards()
     }
 
-    function getCardFunc() {
+    function remainderCardFunc() {
         let remainderCards: CardType[] = state.cards
         for (let i = 0; i < state.playTable.length; i++) {
             remainderCards = remainderCards.filter(c => c.id !== state.playTable[i].id)
         }
-        const card = remainderCards[Math.floor(Math.random() * remainderCards.length)]
+        return remainderCards
+    }
+    function getCardFunc() {
+        const card = remainderCardFunc()![Math.floor(Math.random() * remainderCardFunc()!.length)]
         if (card.value === 1) {
             card.value = 11
         }
@@ -114,6 +117,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                     return {
                         ...state,
                         playTable: state.playTable,
+                        cards:remainderCardFunc(),
                         resultCardsPlayer: [],
                         counterValuePlayer: state.counterValuePlayer + state.playTable[0].value + state.playTable[1].value,
                         resultValuePlayer: 0,
@@ -134,6 +138,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                 case 'player':
                     return {
                         ...state,
+                        cards:remainderCardFunc(),
                         playTable: [...state.playTable, newCard],
                         counterValuePlayer: state.counterValuePlayer + newCard.value
                     }
@@ -151,9 +156,10 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                 case 'player':
                     return {
                         ...state,
+                        cards:remainderCardFunc(),
                         resultValuePlayer: state.counterValuePlayer,
                         counterValuePlayer: 0,
-                        playTable: [],
+                        playTable: []
                     }
                 case 'computer':
                     return {
@@ -176,6 +182,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
             return {
                 ...state,
                 counterValuePlayer: 0,
+                cards: cardsArray,
                 playTable: [],
                 resultValuePlayer: 0,
                 counterValueComp: 0,
@@ -230,5 +237,12 @@ export const getCardForCompThunk = () => {
     return (dispatch: (action: ActionType) => void) => {
         dispatch(getAnotherCardForComp())
         dispatch(changeAceValue())
+    }
+}
+export const startNewGameThunk = () => {
+    return (dispatch: (action: ActionType) => void) => {
+        dispatch(getInitialState())
+        dispatch(startGame())
+        dispatch(toggleShowStartButton(false))
     }
 }
