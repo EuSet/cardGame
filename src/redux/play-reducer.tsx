@@ -47,6 +47,9 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
     function getRandomCards(): Array<CardType> {
         function shuffleCards(): CardType {
             const card = state.cards[Math.floor(Math.random() * state.cards.length)]
+            if (card.value === 1) {
+                card.value = 11
+            }
             if (card.value === 11) {
                 if (state.counterValueComp === 11 || state.counterValuePlayer === 11) {
                     card.value = 10
@@ -82,19 +85,24 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
             remainderCards = remainderCards.filter(c => c.id !== state.playTable[i].id)
         }
         const card = remainderCards[Math.floor(Math.random() * remainderCards.length)]
+        if (card.value === 1) {
+            card.value = 11
+        }
         return card
     }
-    function changeAce(){
-        let newValue = state.counterValuePlayer
-        for(let i = 0; i < state.playTable.length; i++){
-            if( state.playTable[i].value === 11){
-                state.playTable[i].value = 1
-                newValue = newValue - 10
-            } if(newValue > 21){
-                getInitialState()
-               return  newValue = 0
+
+    function changeAce() {
+        let newValue = state.counterValueComp > 0 ? state.counterValueComp : state.counterValuePlayer
+        if (newValue > 21) {
+            for (let i = 0; i < state.playTable.length; i++) {
+                if (state.playTable[i].value === 11) {
+                    newValue = newValue - state.playTable[i].value
+                    state.playTable[i].value = 1
+                    newValue = newValue + state.playTable[i].value
+                }
             }
         }
+
         return newValue
     }
 
@@ -145,14 +153,15 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                         ...state,
                         resultValuePlayer: state.counterValuePlayer,
                         counterValuePlayer: 0,
-                        playTable: []
+                        playTable: [],
                     }
                 case 'computer':
                     return {
                         ...state,
                         resultComputerValue: state.counterValueComp,
                         counterValueComp: 0,
-                        playTable: []
+                        playTable: [],
+                        showStartButton: true
                     }
                 default:
                     return state
@@ -176,7 +185,9 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
         case "CHANGE_ACE_VALUE":
             return {
                 ...state,
-                counterValuePlayer: changeAce()
+                counterValuePlayer: state.counterValueComp === 0 ? changeAce() : 0,
+                counterValueComp: state.counterValueComp > 0 ? changeAce() : 0,
+                playTable: state.playTable
             }
         default:
             return state
@@ -200,12 +211,24 @@ export const stopGame = () => {
 export const stopCompGame = () => {
     return {type: SAVE_COUNT_VALUE, payload: 'computer'} as const
 }
-export const toggleShowStartButton = () => {
-    return {type: TOGGLE_SHOW_START_BUTTON} as const
+export const toggleShowStartButton = (toggle: boolean) => {
+    return {type: TOGGLE_SHOW_START_BUTTON, toggle} as const
 }
 export const getInitialState = () => {
     return {type: READY_FOR_NEW_GAME} as const
 }
 export const changeAceValue = () => {
     return {type: CHANGE_ACE_VALUE} as const
+}
+export const getCardThunk = () => {
+    return (dispatch: (action: ActionType) => void) => {
+        dispatch(getAnotherCard())
+        dispatch(changeAceValue())
+    }
+}
+export const getCardForCompThunk = () => {
+    return (dispatch: (action: ActionType) => void) => {
+        dispatch(getAnotherCardForComp())
+        dispatch(changeAceValue())
+    }
 }

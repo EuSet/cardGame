@@ -4,9 +4,8 @@ import {CardType} from "../redux/play-reducer";
 type PropsType = {
     startGame: () => void
     playTable: Array<CardType>
-    getAnotherCard: () => void
     stopGame: () => void
-    toggleShowStartButton: () => void
+    toggleShowStartButton: (toggle:boolean) => void
     getInitialState: () => void
     counterValuePlayer: number
     resultValuePlayer: number
@@ -14,72 +13,72 @@ type PropsType = {
     counterValueComp: number
     resultComputerValue: number
     startComputerGame: () => void
-    getAnotherCardForComp: () => void
     stopCompGame: () => void
-    changeAceValue: () => void
+    getCardThunk: () => void
+    getCardForCompThunk: () => void
 }
-export const PlayPage = (props: PropsType) => {
+export const PlayPage: React.FC<PropsType> = ({counterValueComp,counterValuePlayer,
+    ...props}) => {
     const startGameFunction = () => {
         props.startGame()
-        props.toggleShowStartButton()
+        props.toggleShowStartButton(false)
     }
     const getCard = () => {
-        props.getAnotherCard()
-        if (props.counterValuePlayer > 21) {
-            alert('you loose')
-        }
+        props.getCardThunk()
+        // props.getAnotherCard()
+        // if (props.counterValuePlayer > 21) {
+        //     alert('you loose')
+        // }
     }
     const startComputerGame = () => {
         props.startComputerGame()
     }
     useEffect(() => {
-        if (props.counterValueComp > 0 && props.counterValueComp < 17) {
+        if (counterValueComp > 0 && counterValueComp < 17) {
             setTimeout(() => {
-                props.getAnotherCardForComp()
+                props.getCardForCompThunk()
             }, 3000)
         }
-        if (props.counterValueComp >= 17 && props.counterValueComp <= 21) {
+        if (counterValueComp >= 17 && counterValueComp <= 21) {
             setTimeout(() => {
                 props.stopCompGame()
             }, 3000)
 
         }
-        if (props.counterValueComp > 21) {
+        if (counterValueComp > 21) {
             setTimeout(() => {
-                props.changeAceValue()
+                props.getInitialState()
             }, 3000)
-
         }
-    }, [props.counterValueComp])
+    }, [counterValueComp])
 
     const stopGameFunction = () => {
         props.stopGame()
-        props.toggleShowStartButton()
         startComputerGame()
     }
     useEffect(() => {
-        if (props.counterValuePlayer > 21) {
-            props.changeAceValue()
+        if (counterValuePlayer > 21) {
+            // props.changeAceValue()
             // if (props.counterValuePlayer > 21) {
-            //     props.getInitialState()
+                props.getInitialState()
             // }
         }
-    }, [props.counterValuePlayer])
+    }, [counterValuePlayer])
 
     return <div>
         {props.showStartButton ? <button onClick={startGameFunction}>start</button> : ''}
-        <button disabled={props.showStartButton} onClick={getCard}>get
-        </button>
-        <button disabled={props.showStartButton} onClick={stopGameFunction}>stop</button>
+        {props.resultValuePlayer === 0 ? <button disabled={props.showStartButton} onClick={getCard}>get
+        </button> : ''}
+        {props.resultValuePlayer === 0 ? <button disabled={props.showStartButton} onClick={stopGameFunction}>stop</button> : ''}
         <div>
-            <span>{props.counterValueComp}</span>
+            <span>{counterValueComp}</span>
             <hr/>
             <span>{props.resultComputerValue}</span>
 
         </div>
         <div>
             <div>
-                <span>{props.counterValuePlayer}</span>
+                <span>{counterValuePlayer}</span>
                 <hr/>
                 <span>{props.resultValuePlayer}</span>
             </div>

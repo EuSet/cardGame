@@ -21,11 +21,11 @@ export const cardsArray:Array<CardType> = [
         image: <img src={twoC} alt={'#'}/>,
         id: v1()
     },
-        {value: 3, image: <img src={threeC} alt={'#'}/>, id: v1()}, {
-        value: 4,
-        image: <img src={fourC} alt={'#'}/>,
-        id: v1()
-    },
+    //     {value: 3, image: <img src={threeC} alt={'#'}/>, id: v1()}, {
+    //     value: 4,
+    //     image: <img src={fourC} alt={'#'}/>,
+    //     id: v1()
+    // },
         {value: 5, image: <img src={fiveC} alt={'#'}/>, id: v1()}, {
         value: 6,
         image: <img src={sixC} alt={'#'}/>,
@@ -41,11 +41,11 @@ export const cardsArray:Array<CardType> = [
         image: <img src={tenC} alt={'#'}/>,
         id: v1()
     },
-        {value: 2, image: <img src={jackC} alt={'#'}/>, id: v1()}, {
-        value: 3,
-        image: <img src={queenC} alt={'#'}/>,
-        id: v1()
-    },
-        {value: 4, image: <img src={kingC} alt={'#'}/>, id: v1()}
+    //     {value: 2, image: <img src={jackC} alt={'#'}/>, id: v1()}, {
+    //     value: 3,
+    //     image: <img src={queenC} alt={'#'}/>,
+    //     id: v1()
+    // },
+    //     {value: 4, image: <img src={kingC} alt={'#'}/>, id: v1()}
 
 ]
