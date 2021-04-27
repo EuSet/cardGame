@@ -3,9 +3,9 @@ import {connect} from "react-redux";
 import {
     getCardForCompThunk,
     getCardThunk,
-    getInitialState,
+    getInitialState, startCompGameThunk,
     startComputerGame,
-    startGame, startNewGameThunk,
+    startNewGameThunk,
     stopCompGame,
     stopGame,
     toggleShowStartButton
@@ -24,7 +24,6 @@ const mapStateToProps = (state: StateType) => {
     }
 }
 export const PlayPageContainer = connect(mapStateToProps,{
-    startGame,
     stopGame,
     toggleShowStartButton,
     getInitialState,
@@ -32,5 +31,6 @@ export const PlayPageContainer = connect(mapStateToProps,{
     stopCompGame,
     getCardThunk,
     getCardForCompThunk,
-    startNewGameThunk
+    startNewGameThunk,
+    startCompGameThunk
 })(PlayPage)

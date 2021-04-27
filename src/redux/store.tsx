@@ -1,6 +1,6 @@
-import {combineReducers, createStore, applyMiddleware} from "redux"
+import {applyMiddleware, combineReducers, createStore} from "redux"
 import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import {composeWithDevTools} from 'redux-devtools-extension';
 import {PlayPageType, playReducer} from "./play-reducer";
 
 export type StateType = {
@@ -8,7 +8,7 @@ export type StateType = {
 }
 
 let reducers = combineReducers({
-    playPage: playReducer
+    playPage: playReducer,
 })
 
 export let store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)) )

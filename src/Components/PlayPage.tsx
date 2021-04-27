@@ -3,7 +3,6 @@ import {CardType} from "../redux/play-reducer";
 
 type PropsType = {
     playTable: Array<CardType>
-    stopGame: () => void
     toggleShowStartButton: (toggle:boolean) => void
     getInitialState: () => void
     counterValuePlayer: number
@@ -11,11 +10,11 @@ type PropsType = {
     showStartButton: boolean
     counterValueComp: number
     resultComputerValue: number
-    startComputerGame: () => void
     stopCompGame: () => void
     getCardThunk: () => void
     getCardForCompThunk: () => void
     startNewGameThunk:() => void
+    startCompGameThunk: () => void
 }
 export const PlayPage: React.FC<PropsType> = ({counterValueComp,counterValuePlayer,
     ...props}) => {
@@ -25,8 +24,8 @@ export const PlayPage: React.FC<PropsType> = ({counterValueComp,counterValuePlay
     const getCard = () => {
         props.getCardThunk()
     }
-    const startComputerGame = () => {
-        props.startComputerGame()
+    const stopGameFunction = () => {
+        props.startCompGameThunk()
     }
     useEffect(() => {
         if (counterValueComp > 0 && counterValueComp < 17) {
@@ -47,10 +46,6 @@ export const PlayPage: React.FC<PropsType> = ({counterValueComp,counterValuePlay
         }
     }, [counterValueComp])
 
-    const stopGameFunction = () => {
-        props.stopGame()
-        startComputerGame()
-    }
     useEffect(() => {
         if (counterValuePlayer > 21) {
                 props.getInitialState()
