@@ -3,12 +3,12 @@ import {connect} from "react-redux";
 import {
     getCardForCompThunk,
     getCardThunk,
-    getInitialState, startCompGameThunk,
+    getInitialState, looseComputer, loosePlayer, drawResultGame, startCompGameThunk,
     startComputerGame,
     startNewGameThunk,
     stopCompGame,
     stopGame,
-    toggleShowStartButton
+    toggleShowStartButton, placeBetBeforeStartGame
 } from "../redux/play-reducer";
 import {PlayPage} from "./PlayPage";
 
@@ -20,7 +20,10 @@ const mapStateToProps = (state: StateType) => {
         resultValuePlayer:state.playPage.resultValuePlayer,
         showStartButton:state.playPage.showStartButton,
         counterValueComp:state.playPage.counterValueComp,
-        resultComputerValue:state.playPage.resultComputerValue
+        resultComputerValue:state.playPage.resultComputerValue,
+        bank:state.playPage.bank,
+        stakePlayer:state.playPage.stakePlayer,
+        stakeComputer:state.playPage.stakeComputer,
     }
 }
 export const PlayPageContainer = connect(mapStateToProps,{
@@ -32,5 +35,9 @@ export const PlayPageContainer = connect(mapStateToProps,{
     getCardThunk,
     getCardForCompThunk,
     startNewGameThunk,
-    startCompGameThunk
+    startCompGameThunk,
+    drawResultGame,
+    loosePlayer,
+    looseComputer,
+    placeBetBeforeStartGame
 })(PlayPage)

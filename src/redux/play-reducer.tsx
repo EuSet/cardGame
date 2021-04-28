@@ -11,9 +11,9 @@ export type ActionType =
     ReturnType<typeof stopCompGame> |
     ReturnType<typeof changeAceValue> |
     ReturnType<typeof placeBetBeforeStartGame> |
-    ReturnType<typeof resultGameForStakes> |
-    ReturnType<typeof over21fromPlayer> |
-    ReturnType<typeof over21fromComputer>
+    ReturnType<typeof drawResultGame> |
+    ReturnType<typeof loosePlayer> |
+    ReturnType<typeof looseComputer>
 
 export type PlayPageType = {
     cards: Array<CardType>
@@ -51,7 +51,7 @@ export const initialState: PlayPageType = {
     showStartButton: true,
     stakePlayer:1000,
     stakeComputer:10000,
-    bank:0
+    bank:0,
 }
 
 export const playReducer = (state: PlayPageType = initialState, action: ActionType) => {
@@ -171,7 +171,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                         cards:remainderCardFunc(),
                         resultValuePlayer: state.counterValuePlayer,
                         counterValuePlayer: 0,
-                        playTable: []
+                        playTable: [],
                     }
                 case 'computer':
                     return {
@@ -199,14 +199,14 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                 resultValuePlayer: 0,
                 counterValueComp: 0,
                 resultComputerValue: 0,
-                showStartButton: true
+                showStartButton: true,
             }
         case "CHANGE_ACE_VALUE":
             return {
                 ...state,
                 counterValuePlayer: state.counterValueComp === 0 ? changeAce() : 0,
                 counterValueComp: state.counterValueComp > 0 ? changeAce() : 0,
-                playTable: state.playTable
+                playTable: state.playTable,
             }
         case "PLACE_BET":
             return {
@@ -273,13 +273,13 @@ export const changeAceValue = () => {
 export const placeBetBeforeStartGame = (value:number) => {
     return {type:PLACE_BET, value} as const
 }
-export const resultGameForStakes = () => {
+export const drawResultGame = () => {
     return {type:RESULT_GAME_FOR_STAKES, payload:'draw'} as const
 }
-export const over21fromPlayer = () => {
+export const loosePlayer = () => {
     return {type:RESULT_GAME_FOR_STAKES, payload:'player loose'} as const
 }
-export const over21fromComputer = () => {
+export const looseComputer = () => {
     return {type:RESULT_GAME_FOR_STAKES, payload:'comp loose'} as const
 }
 

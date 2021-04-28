@@ -1,4 +1,5 @@
-import {initialState, playReducer} from "./play-reducer";
+import {drawResultGame, initialState, playReducer, stopCompGame} from "./play-reducer";
+import {cardsArray} from "../Components/cardsArray";
 
 test('get random cards', () => {
     let newState = playReducer(initialState, {type: "SET_TWO_CARDS_TO_PLAY_TABLE", payload: "player"})
@@ -21,8 +22,6 @@ test('count cards value', () => {
 test('save value', () => {
     let newState = playReducer(initialState, {type: "SET_TWO_CARDS_TO_PLAY_TABLE", payload: "player"})
     let updateNewState = playReducer(newState, {type: "SAVE_COUNT_VALUE", payload: "player"})
-    console.log(updateNewState.resultCardsPlayer.length)
-    expect(updateNewState.resultCardsPlayer).not.toBe([])
     let anotherUpdateNewState = playReducer(updateNewState, {type: "SET_TWO_CARDS_TO_PLAY_TABLE", payload: "player"})
     expect(anotherUpdateNewState.resultValuePlayer).not.toEqual(anotherUpdateNewState.counterValuePlayer)
 })
@@ -31,5 +30,38 @@ test('not the same card', () => {
     let newState = playReducer(initialState, {type: "SET_TWO_CARDS_TO_PLAY_TABLE", payload: "player"})
     expect(newState.playTable[0]).not.toEqual(newState.playTable[1])
 })
-
+test('result game - draw', () => {
+    let state = {
+        cards: cardsArray,
+        playTable: [],
+        counterValuePlayer: 0,
+        counterValueComp: 0,
+        resultValuePlayer: 0,
+        resultComputerValue: 0,
+        showStartButton: true,
+        stakePlayer:990,
+        stakeComputer:9990,
+        bank:20
+    }
+    let newState = playReducer(state, drawResultGame())
+    expect(newState.stakePlayer).toBe(1000)
+    expect(newState.stakeComputer).toBe(10000)
+})
+test('result game should be draw', () => {
+    let state = {
+        cards: cardsArray,
+        playTable: [],
+        counterValuePlayer: 0,
+        counterValueComp: 0,
+        resultValuePlayer: 17,
+        resultComputerValue: 17,
+        showStartButton: true,
+        stakePlayer:990,
+        stakeComputer:9990,
+        bank:20
+    }
+    let newState = playReducer(state, stopCompGame())
+    expect(newState.stakePlayer).toBe(1000)
+    expect(newState.stakeComputer).toBe(10000)
+})
 
