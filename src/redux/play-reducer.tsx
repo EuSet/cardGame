@@ -1,4 +1,5 @@
 import {cardsArray} from "../Components/cardsArray";
+import {StateType} from "./store";
 
 export type ActionType =
     ReturnType<typeof startGame> |
@@ -23,23 +24,26 @@ export type PlayPageType = {
     counterValueComp: number
     resultComputerValue: number
     showStartButton: boolean
-    stakePlayer:number
-    stakeComputer:number
-    bank:number
+    stakePlayer: number
+    stakeComputer: number
+    bank: number
 }
 export type CardType = {
     value: number,
     image: JSX.Element,
     id: string
 }
-const SET_TWO_CARDS_TO_PLAY_TABLE = 'SET_TWO_CARDS_TO_PLAY_TABLE'
-const GET_ANOTHER_CARD = 'GET_ANOTHER_CARD'
-const SAVE_COUNT_VALUE = 'SAVE_COUNT_VALUE'
-const TOGGLE_SHOW_START_BUTTON = 'TOGGLE_SHOW_START_BUTTON'
-const READY_FOR_NEW_GAME = 'READY_FOR_NEW_GAME'
-const CHANGE_ACE_VALUE = 'CHANGE_ACE_VALUE'
-const PLACE_BET = 'PLACE_BET'
-const RESULT_GAME_FOR_STAKES = 'RESULT_GAME_FOR_STAKES'
+
+export enum TYPES_OF_ACTIONS {
+    SET_TWO_CARDS_TO_PLAY_TABLE = 'SET_TWO_CARDS_TO_PLAY_TABLE',
+    GET_ANOTHER_CARD = 'GET_ANOTHER_CARD',
+    SAVE_COUNT_VALUE = 'SAVE_COUNT_VALUE',
+    TOGGLE_SHOW_START_BUTTON = 'TOGGLE_SHOW_START_BUTTON',
+    READY_FOR_NEW_GAME = 'READY_FOR_NEW_GAME',
+    CHANGE_ACE_VALUE = 'CHANGE_ACE_VALUE',
+    PLACE_BET = 'PLACE_BET',
+    RESULT_GAME_FOR_STAKES = 'RESULT_GAME_FOR_STAKES'
+}
 
 export const initialState: PlayPageType = {
     cards: cardsArray,
@@ -49,9 +53,9 @@ export const initialState: PlayPageType = {
     resultValuePlayer: 0,
     resultComputerValue: 0,
     showStartButton: true,
-    stakePlayer:1000,
-    stakeComputer:10000,
-    bank:0,
+    stakePlayer: 1000,
+    stakeComputer: 10000,
+    bank: 0,
 }
 
 export const playReducer = (state: PlayPageType = initialState, action: ActionType) => {
@@ -98,6 +102,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
         }
         return remainderCards
     }
+
     function getCardFunc() {
         const card = remainderCardFunc()![Math.floor(Math.random() * remainderCardFunc()!.length)]
         if (card.value === 1) {
@@ -107,17 +112,22 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
     }
 
     function changeAce() {
+        console.log('change ace')
+
         let newValue = state.counterValueComp > 0 ? state.counterValueComp : state.counterValuePlayer
         if (newValue > 21) {
             for (let i = 0; i < state.playTable.length; i++) {
-                if (state.playTable[i].value === 11) {
+                if (state.playTable[i].value === 11 && newValue > 21) {
                     newValue = newValue - state.playTable[i].value
                     state.playTable[i].value = 1
                     newValue = newValue + state.playTable[i].value
                 }
             }
         }
-
+        if (newValue > 21) {
+            newValue = 0
+            return newValue
+        }
         return newValue
     }
 
@@ -129,17 +139,20 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                     return {
                         ...state,
                         playTable: state.playTable,
-                        cards:remainderCardFunc(),
+                        cards: remainderCardFunc(),
                         resultCardsPlayer: [],
-                        counterValuePlayer: state.counterValuePlayer + state.playTable[0].value + state.playTable[1].value,
+                        counterValuePlayer: (state.counterValuePlayer + state.playTable[0].value + state.playTable[1].value) === 22 ?
+                            21 : state.counterValuePlayer + state.playTable[0].value + state.playTable[1].value,
                         resultValuePlayer: 0,
                         resultComputerValue: 0
                     }
                 case "computer":
                     return {
                         ...state,
+                        cards: remainderCardFunc(),
                         playTable: state.playTable,
-                        counterValueComp: state.counterValueComp + state.playTable[0].value + state.playTable[1].value
+                        counterValueComp: (state.counterValueComp + state.playTable[0].value + state.playTable[1].value) === 22 ?
+                            21 : state.counterValueComp + state.playTable[0].value + state.playTable[1].value
                     }
                 default:
                     return state
@@ -150,13 +163,14 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                 case 'player':
                     return {
                         ...state,
-                        cards:remainderCardFunc(),
+                        cards: remainderCardFunc(),
                         playTable: [...state.playTable, newCard],
-                        counterValuePlayer: state.counterValuePlayer + newCard.value
+                        counterValuePlayer:  state.counterValuePlayer + newCard.value
                     }
                 case 'computer':
                     return {
                         ...state,
+                        cards: remainderCardFunc(),
                         playTable: [...state.playTable, newCard],
                         counterValueComp: state.counterValueComp + newCard.value
                     }
@@ -168,7 +182,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                 case 'player':
                     return {
                         ...state,
-                        cards:remainderCardFunc(),
+                        cards: remainderCardFunc(),
                         resultValuePlayer: state.counterValuePlayer,
                         counterValuePlayer: 0,
                         playTable: [],
@@ -220,21 +234,21 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                 case "draw":
                     return {
                         ...state,
-                        stakePlayer:state.stakePlayer + (state.bank / 2),
+                        stakePlayer: state.stakePlayer + (state.bank / 2),
                         stakeComputer: state.stakeComputer + (state.bank / 2),
-                        bank:0
+                        bank: 0
                     }
                 case "comp loose":
                     return {
                         ...state,
-                        stakePlayer:state.stakePlayer + state.bank,
-                        bank:0
+                        stakePlayer: state.stakePlayer + state.bank,
+                        bank: 0
                     }
                 case "player loose":
                     return {
                         ...state,
                         stakeComputer: state.stakeComputer + state.bank,
-                        bank:0
+                        bank: 0
                     }
                 default:
                     return state
@@ -244,68 +258,42 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
     }
 }
 export const startGame = () => {
-    return {type: SET_TWO_CARDS_TO_PLAY_TABLE, payload: 'player'} as const
+    return {type: TYPES_OF_ACTIONS.SET_TWO_CARDS_TO_PLAY_TABLE, payload: 'player'} as const
 }
 export const startComputerGame = () => {
-    return {type: SET_TWO_CARDS_TO_PLAY_TABLE, payload: 'computer'} as const
+    return {type: TYPES_OF_ACTIONS.SET_TWO_CARDS_TO_PLAY_TABLE, payload: 'computer'} as const
 }
 export const getAnotherCard = () => {
-    return {type: GET_ANOTHER_CARD, payload: 'player'} as const
+    return {type: TYPES_OF_ACTIONS.GET_ANOTHER_CARD, payload: 'player'} as const
 }
 export const getAnotherCardForComp = () => {
-    return {type: GET_ANOTHER_CARD, payload: 'computer'} as const
+    return {type: TYPES_OF_ACTIONS.GET_ANOTHER_CARD, payload: 'computer'} as const
 }
 export const stopGame = () => {
-    return {type: SAVE_COUNT_VALUE, payload: 'player'} as const
+    return {type: TYPES_OF_ACTIONS.SAVE_COUNT_VALUE, payload: 'player'} as const
 }
 export const stopCompGame = () => {
-    return {type: SAVE_COUNT_VALUE, payload: 'computer'} as const
+    return {type: TYPES_OF_ACTIONS.SAVE_COUNT_VALUE, payload: 'computer'} as const
 }
 export const toggleShowStartButton = (toggle: boolean) => {
-    return {type: TOGGLE_SHOW_START_BUTTON, toggle} as const
+    return {type: TYPES_OF_ACTIONS.TOGGLE_SHOW_START_BUTTON, toggle} as const
 }
 export const getInitialState = () => {
-    return {type: READY_FOR_NEW_GAME} as const
+    return {type: TYPES_OF_ACTIONS.READY_FOR_NEW_GAME} as const
 }
 export const changeAceValue = () => {
-    return {type: CHANGE_ACE_VALUE} as const
+    return {type: TYPES_OF_ACTIONS.CHANGE_ACE_VALUE} as const
 }
-export const placeBetBeforeStartGame = (value:number) => {
-    return {type:PLACE_BET, value} as const
+export const placeBetBeforeStartGame = (value: number) => {
+    return {type: TYPES_OF_ACTIONS.PLACE_BET, value} as const
 }
 export const drawResultGame = () => {
-    return {type:RESULT_GAME_FOR_STAKES, payload:'draw'} as const
+    return {type: TYPES_OF_ACTIONS.RESULT_GAME_FOR_STAKES, payload: 'draw'} as const
 }
 export const loosePlayer = () => {
-    return {type:RESULT_GAME_FOR_STAKES, payload:'player loose'} as const
+    return {type: TYPES_OF_ACTIONS.RESULT_GAME_FOR_STAKES, payload: 'player loose'} as const
 }
 export const looseComputer = () => {
-    return {type:RESULT_GAME_FOR_STAKES, payload:'comp loose'} as const
+    return {type: TYPES_OF_ACTIONS.RESULT_GAME_FOR_STAKES, payload: 'comp loose'} as const
 }
 
-
-export const getCardThunk = () => {
-    return (dispatch: (action: ActionType) => void) => {
-        dispatch(getAnotherCard())
-        dispatch(changeAceValue())
-    }
-}
-export const getCardForCompThunk = () => {
-    return (dispatch: (action: ActionType) => void) => {
-        dispatch(getAnotherCardForComp())
-        dispatch(changeAceValue())
-    }
-}
-export const startNewGameThunk = () => {
-    return (dispatch: (action: ActionType) => void) => {
-        dispatch(getInitialState())
-        dispatch(startGame())
-        dispatch(toggleShowStartButton(false))
-    }
-}
-export const startCompGameThunk = () => {
-    return (dispatch:(action:ActionType) => void) => {
-        dispatch(stopGame())
-        dispatch(startComputerGame())
-    }
-}

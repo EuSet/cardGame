@@ -8,6 +8,7 @@ type PropsType = {
 }
 
 export const Stakes = (props:PropsType) => {
+    console.log('Stakes')
     const [value, setValue] = useState(0)
     return <div>
         <div>
@@ -31,3 +32,4 @@ export const Stakes = (props:PropsType) => {
     </div>
 
 }
+export const StakesMemo = React.memo(Stakes)

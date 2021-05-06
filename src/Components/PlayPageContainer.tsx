@@ -1,43 +1,100 @@
-import {StateType} from "../redux/store";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
-    getCardForCompThunk,
-    getCardThunk,
-    getInitialState, looseComputer, loosePlayer, drawResultGame, startCompGameThunk,
-    startComputerGame,
-    startNewGameThunk,
-    stopCompGame,
-    stopGame,
-    toggleShowStartButton, placeBetBeforeStartGame
-} from "../redux/play-reducer";
-import {PlayPage} from "./PlayPage";
-
-const mapStateToProps = (state: StateType) => {
-    return{
-        cards:state.playPage.cards,
-        playTable:state.playPage.playTable,
-        counterValuePlayer:state.playPage.counterValuePlayer,
-        resultValuePlayer:state.playPage.resultValuePlayer,
-        showStartButton:state.playPage.showStartButton,
-        counterValueComp:state.playPage.counterValueComp,
-        resultComputerValue:state.playPage.resultComputerValue,
-        bank:state.playPage.bank,
-        stakePlayer:state.playPage.stakePlayer,
-        stakeComputer:state.playPage.stakeComputer,
-    }
-}
-export const PlayPageContainer = connect(mapStateToProps,{
-    stopGame,
-    toggleShowStartButton,
-    getInitialState,
-    startComputerGame,
-    stopCompGame,
-    getCardThunk,
-    getCardForCompThunk,
-    startNewGameThunk,
-    startCompGameThunk,
+    ActionType,
+    changeAceValue,
     drawResultGame,
-    loosePlayer,
+    getAnotherCard,
+    getAnotherCardForComp,
+    getInitialState,
     looseComputer,
-    placeBetBeforeStartGame
-})(PlayPage)
+    loosePlayer,
+    placeBetBeforeStartGame,
+    startComputerGame,
+    startGame,
+    stopCompGame,
+    stopGame,
+    toggleShowStartButton
+} from "../redux/play-reducer";
+import {PlayPage} from "./PlayPage"
+import {Dispatch} from "redux";
+import {selectAllValues} from "./Selectors";
+import React, {useEffect} from "react";
+
+export const PlayPageContainer = () => {
+    const dispatch = useDispatch<Dispatch<ActionType>>()
+    const {
+        counterValuePlayer, resultValuePlayer,
+        showStartButton, counterValueComp, resultComputerValue, bank,
+        stakePlayer, stakeComputer
+    } = useSelector(selectAllValues)
+    const startGameFunction = () => {
+        dispatch(getInitialState())
+        dispatch(startGame())
+        dispatch(toggleShowStartButton(false))
+    }
+    const getCard = () => {
+        dispatch(getAnotherCard())
+        dispatch(changeAceValue())
+    }
+    const stopGameFunction = () => {
+        dispatch(stopGame())
+        dispatch(startComputerGame())
+    }
+    const placeBetBeforeStartGameAC = (value: number) => {
+        dispatch(placeBetBeforeStartGame(value))
+    }
+
+    useEffect(() => {
+        if (counterValueComp > 0 && counterValueComp < 17) {
+            setTimeout(() => {
+                dispatch(getAnotherCardForComp())
+                dispatch(changeAceValue())
+            }, 3000)
+        }
+        if (counterValueComp <= 21 && counterValueComp >= 17) {
+            setTimeout(() => {
+                if (counterValueComp > resultValuePlayer) {
+                    dispatch(stopCompGame())
+                    dispatch(loosePlayer())
+                }
+                if (counterValueComp < resultValuePlayer || counterValueComp === 0) {
+                    dispatch(stopCompGame())
+                    dispatch(looseComputer())
+                }
+                if (counterValueComp === resultValuePlayer) {
+                    dispatch(stopCompGame())
+                    dispatch(drawResultGame())
+                }
+            }, 3000)
+
+        }
+        if (counterValueComp === 0) {
+            setTimeout(() => {
+                dispatch(getInitialState())
+                dispatch(looseComputer())
+            }, 2000)
+
+        }
+    }, [counterValueComp])
+    useEffect(() => {
+        if (counterValuePlayer > 21) {
+            dispatch(getInitialState())
+            dispatch(loosePlayer())
+        }
+    }, [counterValuePlayer])
+    return <PlayPage
+        stakePlayer={stakePlayer}
+        stakeComputer={stakeComputer}
+        bank={bank}
+        counterValueComp={counterValueComp}
+        counterValuePlayer={counterValuePlayer}
+        resultComputerValue={resultComputerValue}
+        resultValuePlayer={resultValuePlayer}
+        showStartButton={showStartButton}
+        startGameFunction={startGameFunction}
+        getCard={getCard}
+        stopGameFunction={stopGameFunction}
+        placeBetBeforeStartGameAC={placeBetBeforeStartGameAC}
+    />
+
+}
