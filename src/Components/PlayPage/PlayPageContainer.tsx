@@ -14,18 +14,18 @@ import {
     stopCompGame,
     stopGame,
     toggleShowStartButton
-} from "../redux/play-reducer";
+} from "../../redux/play-reducer";
 import {PlayPage} from "./PlayPage"
 import {Dispatch} from "redux";
-import {selectAllValues} from "./Selectors";
-import React, {useEffect} from "react";
+import {selectAllValues} from "../Common/Selectors";
+import React, {useCallback, useEffect} from "react";
 
 export const PlayPageContainer = () => {
     const dispatch = useDispatch<Dispatch<ActionType>>()
     const {
         counterValuePlayer, resultValuePlayer,
         showStartButton, counterValueComp, resultComputerValue, bank,
-        stakePlayer, stakeComputer
+        stakePlayer
     } = useSelector(selectAllValues)
     const startGameFunction = () => {
         dispatch(getInitialState())
@@ -40,9 +40,9 @@ export const PlayPageContainer = () => {
         dispatch(stopGame())
         dispatch(startComputerGame())
     }
-    const placeBetBeforeStartGameAC = (value: number) => {
+    const placeBetBeforeStartGameAC = useCallback((value: number) => {
         dispatch(placeBetBeforeStartGame(value))
-    }
+    },[dispatch])
 
     useEffect(() => {
         if (counterValueComp > 0 && counterValueComp < 17) {
@@ -75,16 +75,17 @@ export const PlayPageContainer = () => {
             }, 2000)
 
         }
-    }, [counterValueComp])
+    }, [dispatch, resultValuePlayer, counterValueComp])
     useEffect(() => {
         if (counterValuePlayer > 21) {
-            dispatch(getInitialState())
-            dispatch(loosePlayer())
+            setTimeout(() => {
+                dispatch(getInitialState())
+                dispatch(loosePlayer())
+            },1500)
         }
-    }, [counterValuePlayer])
+    }, [dispatch, counterValuePlayer])
     return <PlayPage
         stakePlayer={stakePlayer}
-        stakeComputer={stakeComputer}
         bank={bank}
         counterValueComp={counterValueComp}
         counterValuePlayer={counterValuePlayer}

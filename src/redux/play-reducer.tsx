@@ -1,5 +1,4 @@
-import {cardsArray} from "../Components/cardsArray";
-import {StateType} from "./store";
+import {cardsArray} from "../Components/Common/cardsArray";
 
 export type ActionType =
     ReturnType<typeof startGame> |
@@ -124,7 +123,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
                 }
             }
         }
-        if (newValue > 21) {
+        if (newValue > 21 && state.counterValueComp !== 0) {
             newValue = 0
             return newValue
         }

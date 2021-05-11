@@ -1,5 +1,5 @@
 import {drawResultGame, initialState, playReducer, startGame, stopCompGame, TYPES_OF_ACTIONS} from "./play-reducer";
-import {cardsArray} from "../Components/cardsArray";
+import {cardsArray} from "../Components/Common/cardsArray";
 
 test('get random cards', () => {
     let newState = playReducer(initialState, {type: TYPES_OF_ACTIONS.SET_TWO_CARDS_TO_PLAY_TABLE, payload: "player"})

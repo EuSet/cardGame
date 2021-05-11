@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
-import {PlayPageContainer} from "./Components/PlayPageContainer";
-import {CardsContainer} from "./Components/CardsContainer";
+import {PlayPageContainer} from "./Components/PlayPage/PlayPageContainer";
 import {Container} from "@material-ui/core";
 
 
@@ -9,8 +8,7 @@ function App() {
     return (
         <div className="App">
             <Container>
-            <PlayPageContainer/>
-            <CardsContainer/>
+                <PlayPageContainer/>
             </Container>
         </div>
     );
