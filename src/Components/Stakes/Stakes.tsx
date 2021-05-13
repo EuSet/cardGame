@@ -51,7 +51,7 @@ export const Stakes: React.FC<PropsType> = React.memo( (props) => {
             <div>
             {value !== 0 ? <span>{value}</span> :
                 bank === 0 ?
-                    <span>Place Bet</span> : ''}
+                    <span>Choose your bet size</span> : ''}
             </div>
             <div>
             {bank !== 0 ?
@@ -62,7 +62,7 @@ export const Stakes: React.FC<PropsType> = React.memo( (props) => {
                     {resultValuePlayer === 0 ?
                         <Button variant={"contained"} color={"secondary"} disabled={showStartButton} onClick={stopGameFunction}>stop</Button> : ''}
                 </div>
-                : <Button variant={"contained"} color={"secondary"} onClick={() => {
+                : value === 0 ? '' : <Button variant={"contained"} color={"secondary"} onClick={() => {
                     placeBetBeforeStartGame(value)
                     setValue(0)
                 }}>Bet</Button>}
