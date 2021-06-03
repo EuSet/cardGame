@@ -1,24 +1,14 @@
 import {useDispatch, useSelector} from "react-redux";
-import {
-    ActionType,
-    changeAceValue,
-    drawResultGame,
-    getAnotherCard,
-    getAnotherCardForComp,
-    getInitialState,
-    looseComputer,
-    loosePlayer,
-    placeBetBeforeStartGame,
-    startComputerGame,
-    startGame,
-    stopCompGame,
-    stopGame,
-    toggleShowStartButton
-} from "../../redux/play-reducer";
 import {PlayPage} from "./PlayPage"
 import {Dispatch} from "redux";
 import {selectAllValues} from "../Common/Selectors";
 import React, {useCallback, useEffect} from "react";
+import {
+    ActionType, changeAceValue, drawResultGame, getAnotherCard,
+    getInitialState, looseComputer, loosePlayer, placeBetBeforeStartGame, startComputerGame,
+    startGame, stopCompGame, stopGame,
+    toggleShowStartButton
+} from "../../redux/playReducer/play-reducer-actions";
 
 export const PlayPageContainer = () => {
     const dispatch = useDispatch<Dispatch<ActionType>>()
@@ -47,7 +37,7 @@ export const PlayPageContainer = () => {
     useEffect(() => {
         if (counterValueComp > 0 && counterValueComp < 17) {
             setTimeout(() => {
-                dispatch(getAnotherCardForComp())
+                dispatch(getAnotherCard())
                 dispatch(changeAceValue())
             }, 3000)
         }

@@ -1,6 +1,6 @@
 import React from "react";
 import d from "./Cards.module.css"
-import {CardType} from "../../redux/play-reducer";
+import {CardType} from "../../redux/playReducer/play-reducer";
 import {Grid} from "@material-ui/core";
 
 export type PropsType = {

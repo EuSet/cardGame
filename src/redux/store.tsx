@@ -1,7 +1,7 @@
 import {applyMiddleware, combineReducers, createStore} from "redux"
 import thunk from 'redux-thunk';
 import {composeWithDevTools} from 'redux-devtools-extension';
-import {playReducer} from "./play-reducer";
+import {playReducer} from "./playReducer/play-reducer";
 import {loadState, saveState} from "../Components/Utills/localStorage";
 
 let reducers = combineReducers({

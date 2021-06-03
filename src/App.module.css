@@ -1,0 +1,15 @@
+.AppBarGreen{
+    background-image: url("https://i.ytimg.com/vi/gjbzp1MUQrg/maxresdefault.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.AppBarRed{
+    background-image: url("https://static.vecteezy.com/system/resources/previews/000/109/452/non_2x/free-vector-red-poker-background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.AppBarDark{
+    background-image: url("https://static.vecteezy.com/system/resources/previews/002/082/545/non_2x/modern-abstract-casino-background-with-playing-card-signs-poker-symbols-on-black-background-casino-symbols-widescreen-wallpaper-vector.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}

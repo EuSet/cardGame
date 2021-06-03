@@ -1,19 +1,5 @@
-import {cardsArray} from "../Components/Common/cardsArray";
-
-export type ActionType =
-    ReturnType<typeof startGame> |
-    ReturnType<typeof getAnotherCard> |
-    ReturnType<typeof stopGame> |
-    ReturnType<typeof toggleShowStartButton> |
-    ReturnType<typeof getInitialState> |
-    ReturnType<typeof startComputerGame> |
-    ReturnType<typeof getAnotherCardForComp> |
-    ReturnType<typeof stopCompGame> |
-    ReturnType<typeof changeAceValue> |
-    ReturnType<typeof placeBetBeforeStartGame> |
-    ReturnType<typeof drawResultGame> |
-    ReturnType<typeof loosePlayer> |
-    ReturnType<typeof looseComputer>
+import {cardsArray} from "../../Components/Common/cardsArray";
+import {ActionType} from "./play-reducer-actions";
 
 export type PlayPageType = {
     cards: Array<CardType>
@@ -94,7 +80,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
         getRandomCards()
     }
 
-    function remainderCardFunc() {
+    function remainderCardFunc(): CardType[] {
         let remainderCards: CardType[] = state.cards
         for (let i = 0; i < state.playTable.length; i++) {
             remainderCards = remainderCards.filter(c => c.id !== state.playTable[i].id)
@@ -103,7 +89,7 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
     }
 
     function getCardFunc() {
-        const card = remainderCardFunc()![Math.floor(Math.random() * remainderCardFunc()!.length)]
+        const card = remainderCardFunc()[Math.floor(Math.random() * remainderCardFunc().length)]
         if (card.value === 1) {
             card.value = 11
         }
@@ -158,24 +144,13 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
             }
         case "GET_ANOTHER_CARD":
             const newCard = getCardFunc()
-            switch (action.payload) {
-                case 'player':
                     return {
                         ...state,
                         cards: remainderCardFunc(),
                         playTable: [...state.playTable, newCard],
-                        counterValuePlayer:  state.counterValuePlayer + newCard.value
+                        counterValuePlayer: state.counterValuePlayer > 0 ?  state.counterValuePlayer + newCard.value : 0,
+                        counterValueComp: state.counterValueComp > 0 ? state.counterValueComp + newCard.value : 0
                     }
-                case 'computer':
-                    return {
-                        ...state,
-                        cards: remainderCardFunc(),
-                        playTable: [...state.playTable, newCard],
-                        counterValueComp: state.counterValueComp + newCard.value
-                    }
-                default:
-                    return state
-            }
         case "SAVE_COUNT_VALUE":
             switch (action.payload) {
                 case 'player':
@@ -256,43 +231,5 @@ export const playReducer = (state: PlayPageType = initialState, action: ActionTy
             return state
     }
 }
-export const startGame = () => {
-    return {type: TYPES_OF_ACTIONS.SET_TWO_CARDS_TO_PLAY_TABLE, payload: 'player'} as const
-}
-export const startComputerGame = () => {
-    return {type: TYPES_OF_ACTIONS.SET_TWO_CARDS_TO_PLAY_TABLE, payload: 'computer'} as const
-}
-export const getAnotherCard = () => {
-    return {type: TYPES_OF_ACTIONS.GET_ANOTHER_CARD, payload: 'player'} as const
-}
-export const getAnotherCardForComp = () => {
-    return {type: TYPES_OF_ACTIONS.GET_ANOTHER_CARD, payload: 'computer'} as const
-}
-export const stopGame = () => {
-    return {type: TYPES_OF_ACTIONS.SAVE_COUNT_VALUE, payload: 'player'} as const
-}
-export const stopCompGame = () => {
-    return {type: TYPES_OF_ACTIONS.SAVE_COUNT_VALUE, payload: 'computer'} as const
-}
-export const toggleShowStartButton = (toggle: boolean) => {
-    return {type: TYPES_OF_ACTIONS.TOGGLE_SHOW_START_BUTTON, toggle} as const
-}
-export const getInitialState = () => {
-    return {type: TYPES_OF_ACTIONS.READY_FOR_NEW_GAME} as const
-}
-export const changeAceValue = () => {
-    return {type: TYPES_OF_ACTIONS.CHANGE_ACE_VALUE} as const
-}
-export const placeBetBeforeStartGame = (value: number) => {
-    return {type: TYPES_OF_ACTIONS.PLACE_BET, value} as const
-}
-export const drawResultGame = () => {
-    return {type: TYPES_OF_ACTIONS.RESULT_GAME_FOR_STAKES, payload: 'draw'} as const
-}
-export const loosePlayer = () => {
-    return {type: TYPES_OF_ACTIONS.RESULT_GAME_FOR_STAKES, payload: 'player loose'} as const
-}
-export const looseComputer = () => {
-    return {type: TYPES_OF_ACTIONS.RESULT_GAME_FOR_STAKES, payload: 'comp loose'} as const
-}
+
 

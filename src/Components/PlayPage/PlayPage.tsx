@@ -5,7 +5,7 @@ import {CardsContainer} from "../Cards/CardsContainer";
 import p from "./PlayPage.module.css"
 import {Stakes} from "../Stakes/Stakes";
 
-type PropsType = {
+export type PropsType = {
     counterValuePlayer: number
     resultValuePlayer: number
     showStartButton: boolean

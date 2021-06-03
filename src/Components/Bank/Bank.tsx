@@ -2,7 +2,7 @@ import React from "react";
 import {Grid} from "@material-ui/core";
 import b from "./Bank.module.css"
 
-type PropsType = {
+export type PropsType = {
     counterValueComp: number
     resultComputerValue: number
     counterValuePlayer: number

@@ -52,7 +52,7 @@ import tenH from "../cardsimages/10H.png";
 import jackH from "../cardsimages/JH.png";
 import queenH from "../cardsimages/QH.png";
 import kingH from "../cardsimages/KH.png";
-import {CardType} from "../../redux/play-reducer";
+import {CardType} from "../../redux/playReducer/play-reducer";
 
 export const cardsArray:Array<CardType> = [
     {value:  11 || 1 || 10, image: <img src={aceC} alt={'#'}/>, id: v1()},

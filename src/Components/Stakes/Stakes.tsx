@@ -1,12 +1,14 @@
-import React, {useState} from "react";
+import React, {ChangeEvent, useContext, useState} from "react";
 import five from "./../cardsimages/chipsimg/five.png";
 import twentyFive from "./../cardsimages/chipsimg/twentyfive.png";
 import fifty from "./../cardsimages/chipsimg/fifty.png";
 import oneHundred from "./../cardsimages/chipsimg/onehundred.png";
 import s from "./Stakes.module.css"
-import {Button, Grid} from "@material-ui/core";
+import {Grid, Slider} from "@material-ui/core";
+import {Buttons} from "./Buttons";
+import {ThemeContext} from "../Common/theme-context";
 
-type PropsType = {
+export type PropsType = {
     stakePlayer:number
     bank:number
     placeBetBeforeStartGame:(value:number) => void
@@ -28,46 +30,55 @@ export const Stakes: React.FC<PropsType> = React.memo( (props) => {
         stakePlayer,
         placeBetBeforeStartGame,
     } = props
+    const {styleTheme} = useContext(ThemeContext)
+
+
     console.log('Stakes')
-    const [value, setValue] = useState(0)
+    const [value, setValue] = useState<number>(0)
+    const chooseBetSizeFunc = (chip:number) => {
+        if(chip + value <= stakePlayer){
+            setValue(value + chip)
+        }
+    }
+    const onChangeRange = (event: ChangeEvent<{}>, newValue: number | number[]) => {
+        let val = newValue as number
+        setValue(val)
+    }
     return <Grid className={s.container} container>
         <div>
         <Grid className={s.chips} container>
             <div>
-            <img onClick={() => {setValue(value + 5)}} src={five} alt={'5'}/>
-            <img onClick={() => {setValue(value + 5)}} src={five} alt={'5'}/>
+            <img onClick={() => chooseBetSizeFunc(5)} src={five} alt={'5'}/>
+            <img onClick={() => chooseBetSizeFunc(5)} src={five} alt={'5'}/>
             </div>
             <div>
-            <img onClick={() => {setValue(value + 25)}} src={twentyFive} alt={'25'}/>
-            <img onClick={() => {setValue(value + 50)}} src={fifty} alt={'50'}/>
-            <img onClick={() => {setValue(value + 100)}} src={oneHundred} alt={'100'}/>
+            <img onClick={() => chooseBetSizeFunc(25)} src={twentyFive} alt={'25'}/>
+            <img onClick={() => chooseBetSizeFunc(50)} src={fifty} alt={'50'}/>
+            <img onClick={() => chooseBetSizeFunc(100)} src={oneHundred} alt={'100'}/>
             </div>
-            <div>
-                <span className={s.stake}>${stakePlayer}</span>
+            <div className={s.slider}>
+                <span style={{color:styleTheme, fontSize:'30px'}}>${stakePlayer}</span>
+                <Slider
+                    className={s.slider2}
+                    style={{color:styleTheme, width:'100px'}}
+                    step={5}
+                    max={stakePlayer}
+                    onChange={onChangeRange}
+                />
             </div>
         </Grid>
         </div>
-        <div className={s.buttons}>
-            <div>
-            {value !== 0 ? <span>{value}</span> :
-                bank === 0 ?
-                    <span>Choose your bet size</span> : ''}
-            </div>
-            <div>
-            {bank !== 0 ?
-                <div>
-                    {showStartButton ? <Button variant={"contained"} color={"secondary"} onClick={startGameFunction}>start</Button> : ''}
-                    {resultValuePlayer === 0 ? <Button variant={"contained"} color={"secondary"} disabled={showStartButton} onClick={getCard}>get
-                    </Button> : ''}
-                    {resultValuePlayer === 0 ?
-                        <Button variant={"contained"} color={"secondary"} disabled={showStartButton} onClick={stopGameFunction}>stop</Button> : ''}
-                </div>
-                : value === 0 ? '' : <Button variant={"contained"} color={"secondary"} onClick={() => {
-                    placeBetBeforeStartGame(value)
-                    setValue(0)
-                }}>Bet</Button>}
-            </div>
-        </div>
+        <Buttons
+            bank={bank}
+            placeBetBeforeStartGame={placeBetBeforeStartGame}
+            showStartButton={showStartButton}
+            getCard={getCard}
+            startGameFunction={startGameFunction}
+            stopGameFunction={stopGameFunction}
+            resultValuePlayer={resultValuePlayer}
+            value={value}
+            setValue={setValue}
+        />
     </Grid>
 
 })
