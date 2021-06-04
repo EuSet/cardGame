@@ -15,3 +15,5 @@ store.subscribe(() => {
         playPage: store.getState().playPage
     })
 })
+//@ts-ignore
+window.store = store.getState()

@@ -4,10 +4,13 @@ import {PlayPageContainer} from "./Components/PlayPage/PlayPageContainer";
 import {Container} from "@material-ui/core";
 import {Header} from "./Components/Header/Header";
 import {styleThemeType, ThemeContext, themeType} from "./Components/Common/theme-context";
+import {Login} from "./Components/Login/Login";
+import {BrowserRouter, Route, Redirect} from "react-router-dom";
 
 
 
 function App() {
+    const [btnName, setBtnName] = useState('login')
     const [theme, setTheme] = useState<themeType>('green');
     let styleTheme:styleThemeType = '#B60900'
     const AppBarStyle = () => {
@@ -26,12 +29,16 @@ function App() {
     }
     return (
         <div className={AppBarStyle()}>
+            <BrowserRouter>
             <ThemeContext.Provider value={{styleTheme, theme}}>
-            <Header AppBarStyle={AppBarStyle} setTheme={setTheme}/>
+            <Header btnName={btnName} AppBarStyle={AppBarStyle} setTheme={setTheme}/>
             <Container>
-                <PlayPageContainer/>
+                <Redirect exact from="/" to="/playpage" />
+                <Route path='/login' render={() => <Login setBtnName={setBtnName} />}/>
+                <Route exact path='/playpage' render={() => <PlayPageContainer/>}/>
             </Container>
             </ThemeContext.Provider>
+            </BrowserRouter>
         </div>
     );
 }

@@ -13,6 +13,7 @@ export type PropsType = {
     resultValuePlayer: number
     value: number,
     setValue: (value: number) => void
+    counterValuePlayer:number
 }
 
 export const Buttons = (props: PropsType) => {
@@ -25,7 +26,8 @@ export const Buttons = (props: PropsType) => {
         getCard,
         stopGameFunction,
         value,
-        setValue
+        setValue,
+        counterValuePlayer
     } = props
     const {styleTheme, theme} = useContext(ThemeContext)
     const textTheme = theme === "green" ? '#d9c9c9' : 'black'
@@ -38,14 +40,17 @@ export const Buttons = (props: PropsType) => {
         <div>
             {bank !== 0 ?
                 <div>
-                    {resultValuePlayer === 0 ?
-                        <Button variant={"contained"} color={"secondary"} disabled={showStartButton} onClick={getCard}>get
+                    {resultValuePlayer === 0 && counterValuePlayer !== 0 ?
+                        <Button variant={"contained"} style={{background: styleTheme}}
+                                disabled={showStartButton} onClick={getCard}>
+                            <span style={{color: textTheme}}>get</span>
                         </Button> : ''}
-                    {showStartButton ? <Button variant={"contained"} color={"secondary"}
-                                               onClick={startGameFunction}>start</Button> : ''}
-                    {resultValuePlayer === 0 ?
-                        <Button variant={"contained"} color={"secondary"} disabled={showStartButton}
-                                onClick={stopGameFunction}>stop</Button> : ''}
+                    {showStartButton ? <Button variant={"contained"} style={{background: styleTheme}}
+                                               onClick={startGameFunction}>
+                        <span style={{color: textTheme}}>start</span></Button> : ''}
+                    {resultValuePlayer === 0 && counterValuePlayer !== 0 ?
+                        <Button variant={"contained"} style={{background: styleTheme}} disabled={showStartButton}
+                                onClick={stopGameFunction}><span style={{color: textTheme}}>stop</span></Button> : ''}
                 </div>
                 : value === 0 ? '' : <Button variant={"contained"} style={{background: styleTheme}} onClick={() => {
                     placeBetBeforeStartGame(value)

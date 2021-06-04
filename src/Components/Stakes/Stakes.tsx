@@ -17,6 +17,7 @@ export type PropsType = {
     stopGameFunction: () => void
     showStartButton: boolean
     resultValuePlayer:number
+    counterValuePlayer:number
 }
 
 export const Stakes: React.FC<PropsType> = React.memo( (props) => {
@@ -29,6 +30,7 @@ export const Stakes: React.FC<PropsType> = React.memo( (props) => {
         stopGameFunction,
         stakePlayer,
         placeBetBeforeStartGame,
+        counterValuePlayer
     } = props
     const {styleTheme} = useContext(ThemeContext)
 
@@ -78,6 +80,7 @@ export const Stakes: React.FC<PropsType> = React.memo( (props) => {
             resultValuePlayer={resultValuePlayer}
             value={value}
             setValue={setValue}
+            counterValuePlayer={counterValuePlayer}
         />
     </Grid>
 

@@ -17,19 +17,19 @@ export const PlayPageContainer = () => {
         showStartButton, counterValueComp, resultComputerValue, bank,
         stakePlayer
     } = useSelector(selectAllValues)
-    const startGameFunction = () => {
-        dispatch(getInitialState())
-        dispatch(startGame())
-        dispatch(toggleShowStartButton(false))
-    }
-    const getCard = () => {
+    const startGameFunction = useCallback( () => {
+         dispatch(getInitialState())
+         dispatch(startGame())
+         dispatch(toggleShowStartButton(false))
+    }, [dispatch])
+    const getCard = useCallback(  () => {
         dispatch(getAnotherCard())
         dispatch(changeAceValue())
-    }
-    const stopGameFunction = () => {
+    }, [dispatch])
+    const stopGameFunction = useCallback( () => {
         dispatch(stopGame())
         dispatch(startComputerGame())
-    }
+    },[dispatch])
     const placeBetBeforeStartGameAC = useCallback((value: number) => {
         dispatch(placeBetBeforeStartGame(value))
     },[dispatch])

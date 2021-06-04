@@ -55,6 +55,7 @@ export const PlayPage: React.FC<PropsType> = props => {
             startGameFunction={startGameFunction}
             stopGameFunction={stopGameFunction}
             resultValuePlayer={resultValuePlayer}
+            counterValuePlayer={counterValuePlayer}
         />
         </Grid>
     </Grid>
