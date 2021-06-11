@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext} from "react";
 import {AppBar, Button, createStyles, IconButton, makeStyles, Theme, Toolbar, Typography} from "@material-ui/core";
 import style from "./Header.module.css"
 import {Radios} from "../Common/Radios";
@@ -9,6 +9,7 @@ type PropsType = {
     setTheme: (value:themeType) => void
     AppBarStyle: () => string
     btnName:string
+    changeThemeFunc: (value: themeType) => void
 }
 export const Header:React.FC<PropsType> = props => {
     const {theme} = useContext(ThemeContext)
@@ -32,7 +33,7 @@ export const Header:React.FC<PropsType> = props => {
     return <AppBar className={props.AppBarStyle()} position="static">
         <Toolbar>
             <IconButton edge="start" color="inherit">
-                <Radios setTheme={props.setTheme}/>
+                <Radios changeThemeFunc={props.changeThemeFunc} setTheme={props.setTheme}/>
             </IconButton>
             <Typography className={style.title} variant="h6">
                 <span className={buttonTheme}>Card game 21</span>

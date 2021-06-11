@@ -6,6 +6,7 @@ import {ThemeContext, themeType} from "./theme-context";
 
 type PropsType = {
     setTheme: (value:themeType) => void
+    changeThemeFunc:(value: themeType) => void
 }
 export const Radios = (props:PropsType) => {
     const {theme} = useContext(ThemeContext)
@@ -20,8 +21,10 @@ export const Radios = (props:PropsType) => {
     })((props: RadioProps) => <Radio color="default" {...props} />);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if(event.target.value === 'green' || event.target.value === 'red' || event.target.value === 'dark')
-        props.setTheme(event.target.value)
+        if(event.target.value === 'green' || event.target.value === 'red' || event.target.value === 'dark'){
+            props.changeThemeFunc(event.target.value)
+            // props.setTheme(event.target.value)
+        }
     };
     return <>
         <Radio
