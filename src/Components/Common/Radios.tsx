@@ -21,20 +21,11 @@ export const Radios = (props:PropsType) => {
     })((props: RadioProps) => <Radio color="default" {...props} />);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if(event.target.value === 'green' || event.target.value === 'red' || event.target.value === 'dark'){
+        if(event.target.value === 'green' || event.target.value === 'dark'){
             props.changeThemeFunc(event.target.value)
-            // props.setTheme(event.target.value)
         }
     };
     return <>
-        <Radio
-            style={{color:'#B60900'}}
-            checked={theme === 'red'}
-            onChange={handleChange}
-            value="red"
-            name="radio-button-demo"
-            inputProps={{ 'aria-label': 'B' }}
-        />
         <GreenRadio
             checked={theme === 'green'}
             onChange={handleChange}

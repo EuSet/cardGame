@@ -16,9 +16,6 @@ function App() {
     let styleTheme: styleThemeType = '#B60900'
     const AppBarStyle = () => {
         switch (theme) {
-            case "red":
-                styleTheme = '#d9c9c9'
-                return h.AppBarRed
             case "dark":
                 styleTheme = '#d9c9c9'
                 return h.AppBarDark
@@ -28,7 +25,6 @@ function App() {
                 return h.AppBarGreen
         }
     }
-
     const changeThemeFunc = (value: themeType) => {
         setState(true)
         setTimeout(() => {
