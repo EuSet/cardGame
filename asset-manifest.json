@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/cardGame/static/css/main.7403fc3b.chunk.css",
-    "main.js": "/cardGame/static/js/main.b8dc5185.chunk.js",
-    "main.js.map": "/cardGame/static/js/main.b8dc5185.chunk.js.map",
+    "main.css": "/cardGame/static/css/main.c1f1800a.chunk.css",
+    "main.js": "/cardGame/static/js/main.fdc39b81.chunk.js",
+    "main.js.map": "/cardGame/static/js/main.fdc39b81.chunk.js.map",
     "runtime-main.js": "/cardGame/static/js/runtime-main.201d5c02.js",
     "runtime-main.js.map": "/cardGame/static/js/runtime-main.201d5c02.js.map",
-    "static/js/2.79cdd2e4.chunk.js": "/cardGame/static/js/2.79cdd2e4.chunk.js",
-    "static/js/2.79cdd2e4.chunk.js.map": "/cardGame/static/js/2.79cdd2e4.chunk.js.map",
+    "static/js/2.acd40f90.chunk.js": "/cardGame/static/js/2.acd40f90.chunk.js",
+    "static/js/2.acd40f90.chunk.js.map": "/cardGame/static/js/2.acd40f90.chunk.js.map",
     "static/js/3.34c1403a.chunk.js": "/cardGame/static/js/3.34c1403a.chunk.js",
     "static/js/3.34c1403a.chunk.js.map": "/cardGame/static/js/3.34c1403a.chunk.js.map",
     "index.html": "/cardGame/index.html",
-    "static/css/main.7403fc3b.chunk.css.map": "/cardGame/static/css/main.7403fc3b.chunk.css.map",
-    "static/js/2.79cdd2e4.chunk.js.LICENSE.txt": "/cardGame/static/js/2.79cdd2e4.chunk.js.LICENSE.txt",
+    "static/css/main.c1f1800a.chunk.css.map": "/cardGame/static/css/main.c1f1800a.chunk.css.map",
+    "static/js/2.acd40f90.chunk.js.LICENSE.txt": "/cardGame/static/js/2.acd40f90.chunk.js.LICENSE.txt",
     "static/media/10C.9ed3d91b.png": "/cardGame/static/media/10C.9ed3d91b.png",
     "static/media/10D.7ae9eea7.png": "/cardGame/static/media/10D.7ae9eea7.png",
     "static/media/10H.4c239d9d.png": "/cardGame/static/media/10H.4c239d9d.png",
@@ -64,6 +64,7 @@
     "static/media/QD.028ad7d4.png": "/cardGame/static/media/QD.028ad7d4.png",
     "static/media/QH.4bc634e4.png": "/cardGame/static/media/QH.4bc634e4.png",
     "static/media/QS.6ff68c33.png": "/cardGame/static/media/QS.6ff68c33.png",
+    "static/media/index.css": "/cardGame/static/media/blackTheme.20c2fcf1.jpg",
     "static/media/fifty.f5e885cc.png": "/cardGame/static/media/fifty.f5e885cc.png",
     "static/media/five.43b8aba4.png": "/cardGame/static/media/five.43b8aba4.png",
     "static/media/onehundred.74965bce.png": "/cardGame/static/media/onehundred.74965bce.png",
@@ -71,8 +72,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.201d5c02.js",
-    "static/js/2.79cdd2e4.chunk.js",
-    "static/css/main.7403fc3b.chunk.css",
-    "static/js/main.b8dc5185.chunk.js"
+    "static/js/2.acd40f90.chunk.js",
+    "static/css/main.c1f1800a.chunk.css",
+    "static/js/main.fdc39b81.chunk.js"
   ]
 }
