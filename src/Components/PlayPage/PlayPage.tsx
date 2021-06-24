@@ -4,6 +4,9 @@ import {Bank} from "../Bank/Bank";
 import {CardsContainer} from "../Cards/CardsContainer";
 import p from "./PlayPage.module.css"
 import {Stakes} from "../Stakes/Stakes";
+import {useSelector} from "react-redux";
+import {StateType} from "../../redux/store";
+import { Redirect } from "react-router-dom";
 
 export type PropsType = {
     counterValuePlayer: number
@@ -32,7 +35,10 @@ export const PlayPage: React.FC<PropsType> = props => {
         getCard,
         stopGameFunction
     } = props
-
+    const auth = useSelector<StateType, boolean>(state => state.auth.auth)
+    if(!auth){
+       return <Redirect to={'/login'}/>
+    }
     return <Grid className={p.container} container>
         <Grid item>
         <Bank counterValueComp={counterValueComp}

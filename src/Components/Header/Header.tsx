@@ -3,21 +3,24 @@ import {AppBar, Button, createStyles, IconButton, makeStyles, Theme, Toolbar, Ty
 import style from "./Header.module.css"
 import {Radios} from "../Common/Radios";
 import {ThemeContext, themeType} from "../Common/theme-context";
-import {NavLink} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {StateType} from "../../redux/store";
+import {signOut} from "../../redux/authReducer/auth-reducer";
 
 type PropsType = {
     setTheme: (value:themeType) => void
     AppBarStyle: () => string
-    btnName:string
     changeThemeFunc: (value: themeType) => void
 }
 export const Header:React.FC<PropsType> = props => {
+    const auth = useSelector<StateType, boolean>(state => state.auth.auth)
+    const dispatch = useDispatch()
     const {theme} = useContext(ThemeContext)
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
             themeGreen: {
-                color:'#B60900',
-                borderColor:'#B60900',
+                color:'#F50057',
+                borderColor:'#F50057',
                 borderRadius:'4px',
             },
             themeRed: {
@@ -33,15 +36,13 @@ export const Header:React.FC<PropsType> = props => {
     return <AppBar className={props.AppBarStyle()} position="static">
         <Toolbar>
             <IconButton edge="start" color="inherit">
-                <Radios changeThemeFunc={props.changeThemeFunc} setTheme={props.setTheme}/>
+                {auth && <Radios changeThemeFunc={props.changeThemeFunc} setTheme={props.setTheme}/>}
             </IconButton>
             <Typography className={style.title} variant="h6">
-                <span className={buttonTheme}>Card game 21</span>
+                {auth && <span className={buttonTheme}>Card game 21</span>}
             </Typography>
-            <Button className={buttonTheme} variant={"outlined"}>
-                <NavLink to={props.btnName === 'login' ? '/login' : '/playpage'}><span className={buttonTheme}>
-                    {props.btnName}
-                    </span></NavLink></Button>
+            {auth && <Button onClick={() => dispatch(signOut())} className={buttonTheme}
+                             variant={"outlined"}><span>log out</span></Button>}
         </Toolbar>
     </AppBar>
 }
