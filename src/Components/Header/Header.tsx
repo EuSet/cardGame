@@ -39,7 +39,8 @@ export const Header:React.FC<PropsType> = props => {
                 {auth && <Radios changeThemeFunc={props.changeThemeFunc} setTheme={props.setTheme}/>}
             </IconButton>
             <Typography className={style.title} variant="h6">
-                {auth && <span className={buttonTheme}>Card game 21</span>}
+                <span className={buttonTheme}>{auth ? 'Card game 21' :
+                    'To take part in the game - register or enter your username and password'}</span>
             </Typography>
             {auth && <Button onClick={() => dispatch(signOut())} className={buttonTheme}
                              variant={"outlined"}><span>log out</span></Button>}

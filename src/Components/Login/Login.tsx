@@ -10,7 +10,7 @@ import {StateType} from "../../redux/store";
 import {signIn, signUp} from "../../redux/authReducer/auth-reducer";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
-export const Login = withRouter((props:RouteComponentProps) => {
+export const Login = withRouter((props: RouteComponentProps) => {
     const [isSignUp, setIsSignUp] = useState(false)
     console.log(isSignUp)
     const dispatch = useDispatch()
@@ -20,10 +20,10 @@ export const Login = withRouter((props:RouteComponentProps) => {
         initialValues: {
             email: '',
             password: '',
-            userName:''
+            userName: ''
         },
         onSubmit: values => {
-            if(isSignUp){
+            if (isSignUp) {
                 dispatch(signUp(values.email, values.password, values.userName))
                 setIsSignUp(false)
             } else {
@@ -32,26 +32,28 @@ export const Login = withRouter((props:RouteComponentProps) => {
             formik.resetForm()
         },
     });
-    if(auth){
+    if (auth) {
         return <Redirect to={'/playpage'}/>
     }
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
             multilineColor: {
-              color: '#F50057',
+                color: '#F50057',
             },
         }),
     );
     const classes = useStyles();
-    return <Grid style={{height:'100vh'}} container justify={'center'}>
+    return <Grid style={{height: '100vh'}} container justify={'center'}>
         <Grid item xs={4}>
             <form onSubmit={(e) => {
                 formik.handleSubmit(e)
             }}>
                 <FormControl>
                     <FormGroup>
-                        {error && (<div style={{color:'red'}}>{error}</div>)}
-                       <TextField
+                        {error && (<div style={{color: 'red'}}>{error}</div>)}
+                        <TextField
+                            id="outlined-basic"
+                            variant={"outlined"}
                             InputProps={{
                                 className: classes.multilineColor
                             }}
@@ -61,17 +63,22 @@ export const Login = withRouter((props:RouteComponentProps) => {
                             {...formik.getFieldProps('email')}
                         />
                         <TextField
+                            InputProps={{
+                                className: classes.multilineColor
+                            }}
+                            id="outlined-basic"
+                            variant={"outlined"}
                             color={"secondary"}
                             type='password'
                             label='Password'
                             margin='normal'
                             {...formik.getFieldProps('password')}
                         />
-                        <div style={{display:'flex'}}>
-                            <div style={{padding:'10px'}}>
+                        <div style={{display: 'flex'}}>
+                            <div style={{padding: '10px'}}>
                                 <Button type={'submit'} variant={'contained'} color={'secondary'}>Login</Button>
                             </div>
-                            <div style={{padding:'10px'}}>
+                            <div style={{padding: '10px'}}>
                                 <Button type={'submit'} variant={'contained'} onClick={() => setIsSignUp(true)}
                                         color={'secondary'}>SignUp</Button>
                             </div>
